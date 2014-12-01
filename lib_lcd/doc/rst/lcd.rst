@@ -68,10 +68,6 @@ LCD server and client are instantiated as parallel tasks that run in a
 ``par`` statement. The client (application on most cases) can connect via 
 a streaming channel.
 
-.. figure:: images/lcd_task_diag.odg
-
-   LCD task diagram
-
 For example, the following code instantiates an LCD server
 and connects and application to it::
 
