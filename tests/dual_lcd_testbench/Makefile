@@ -6,7 +6,7 @@ TARGET = SLICEKIT-A16
 # The APP_NAME variable determines the name of the final .xe file. It should
 # not include the .xe postfix. If left blank the name will default to
 # the project name
-APP_NAME = lcd_demo
+APP_NAME = dual_lcd_testbench
 
 # The USED_MODULES variable lists other module used by the application.
 USED_MODULES = lib_lcd
@@ -16,7 +16,7 @@ USED_MODULES = lib_lcd
 # XCC_XC_FLAGS, XCC_C_FLAGS, XCC_ASM_FLAGS, XCC_CPP_FLAGS
 # If the variable XCC_MAP_FLAGS is set it overrides the flags passed to
 # xcc for the final link (mapping) stage.
-XCC_FLAGS = -g -O2
+XCC_FLAGS = -O2 -g
 
 # The XCORE_ARM_PROJECT variable, if set to 1, configures this
 # project to create both xCORE and ARM binaries.

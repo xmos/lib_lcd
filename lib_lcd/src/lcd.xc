@@ -4,10 +4,6 @@
 #include <print.h>
 #include <stdlib.h>
 
-//TODO there are no tests for output_data16_port32 mode currently.(use a A16)
-//
-
-
 static void init(streaming chanend c_lcd){
     c_lcd :> int;
     c_lcd <: 0;
@@ -137,7 +133,6 @@ void lcd_server(streaming chanend c_client,
   if(!isnull(p_v_sync))
       configure_out_port(p_v_sync, p_cb, 1);
 
-  start_clock(p_cb);
 
   // Sanity checks
   if(isnull(p_h_sync) && h_pulse_width!=0)
@@ -148,6 +143,8 @@ void lcd_server(streaming chanend c_client,
 
   //wait here for the client to say that it is ready
   init(c_client);
+
+  start_clock(p_cb);
 
   // get the port time
   p_rgb <: 0 @ time;

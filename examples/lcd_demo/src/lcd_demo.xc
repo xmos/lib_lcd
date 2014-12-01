@@ -1,11 +1,24 @@
 #include <platform.h>
-#include <xclib.h>
 #include "lcd.h"
 #include "sprite.h"
 
-#define LCD_ROW_WORDS 240
+#define LCD_CLOCK_DIVIDER 3
+#define LCD_H_FRONT_PORCH 5
+#define LCD_H_BACK_PORCH 40
+#define LCD_H_PULSE_WIDTH 1
+#define LCD_V_FRONT_PORCH 8
+#define LCD_V_BACK_PORCH 8
+#define LCD_V_PULSE_WIDTH 1
 #define LCD_HEIGHT 272
+#define LCD_WIDTH 480
+#define LCD_BYTES_PER_PIXEL 2
+#define LCD_OUTPUT_MODE data16_port16
+#define LCD_ROW_WORDS (LCD_WIDTH/2)
 
+/*
+ * Put an lcd into circle slot of A16 board.
+ * You should see a bouncing XMOS logo.
+ */
 static unsafe void add(unsigned x, unsigned y, unsigned line, unsigned * unsafe buffer) {
   if (line >= x && line < x + SPRITE_HEIGHT_PX)
     for (unsigned i = y; i < y + SPRITE_WIDTH_WORDS; i++)
@@ -38,7 +51,6 @@ static void move_sprite(int &x, int &y, int &vx, int &vy){
         x = LCD_HEIGHT - SPRITE_HEIGHT_PX - 1;
     }
 }
-
 
 void demo(streaming chanend c_lcd) {
     unsigned buffer[2][LCD_ROW_WORDS];
@@ -88,22 +100,27 @@ on tile[1] : clock                  lcd_cb                      = XS1_CLKBLK_1;
 int main() {
     streaming chan c_lcd;
   par {
-    on tile[1]:lcd_server(
-          c_lcd,
-          lcd_rgb,
-          lcd_clk,
-          lcd_data_enabled,
-          lcd_h_sync,
-          lcd_v_sync,
-          lcd_cb,
-          480,
-          272,
-          5, 40, 1,
-          8, 8, 1,
-          data16_port16,
-          3);
+      on tile[1]:lcd_server(
+              c_lcd,
+              lcd_rgb,
+              lcd_clk,
+              lcd_data_enabled,
+              lcd_h_sync,
+              lcd_v_sync,
+              lcd_cb,
+              LCD_WIDTH,
+              LCD_HEIGHT,
+              LCD_H_FRONT_PORCH,
+              LCD_H_BACK_PORCH,
+              LCD_H_PULSE_WIDTH,
+              LCD_V_FRONT_PORCH,
+              LCD_V_BACK_PORCH,
+              LCD_V_PULSE_WIDTH,
+              LCD_OUTPUT_MODE,
+              LCD_CLOCK_DIVIDER);
     on tile[1]: demo(c_lcd);
     on tile[1]: par(int i=0;i<6;i++) while (1);
   }
   return 0;
 }
+

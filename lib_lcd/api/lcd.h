@@ -7,31 +7,6 @@ typedef enum {
     data16_port32,  //use the lower 16 bits of a 32 bit port
 } e_output_mode;
 
-typedef struct {
-  unsigned width;
-  unsigned height;
-  unsigned h_front_porch;
-  unsigned h_back_porch;
-  unsigned h_pulse_width;
-  unsigned v_front_porch;
-  unsigned v_back_porch;
-  unsigned v_pulse_width;
-  e_output_mode output_mode;
-  unsigned clock_divider;
-} lcd_config;
-
-/**
- * The structure to represent LCD ports and configuration
- */
-typedef struct lcd_ports {
-  out buffered port:32 lcd_rgb;     /**< 16 bit data port */
-  out port lcd_clk;                 /**< The clock line */
-  out port ?lcd_data_enabled;        /**< The LCD data enabled */
-  out buffered port:32 ?h_sync;      /**< The LCD horizontal sync */
-  out port ?v_sync;                  /**< The LCD vertical sync */
-  clock clk_lcd;                    /**< Clock block used for LCD clock */
-} lcd_ports;
-
 /** \brief The LCD server.
  *
  * \param c_client          The channel connecting to the client.
