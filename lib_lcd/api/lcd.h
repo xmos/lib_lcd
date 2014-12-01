@@ -65,7 +65,6 @@ void lcd_update(streaming chanend c_lcd, unsigned * unsafe buffer);
  * This is a blocking call that may be used as a select handler.
  *
  * \param c_lcd     The channel to the LCD server
- * \param buffer    This returns the movable pointer from the LCD server
  */
 #pragma select handler
 void lcd_req(streaming chanend c_lcd);

@@ -58,18 +58,17 @@ from one to 32 bits wide.
 LCD API
 --------
 
-All |lcd| functions can be accessed via the ``lcd.h`` header::
+All LCD functions can be accessed via the ``lcd.h`` header::
 
   #include <lcd.h>
 
-You will also have to add ``lib_lcd`` to the
-``USED_MODULES`` field of your application Makefile.
+You will also have to add ``lib_lcd`` to the ``USED_MODULES`` field of your application Makefile.
 
-|lcd| server and client are instantiated as parallel tasks that run in a
+LCD server and client are instantiated as parallel tasks that run in a
 ``par`` statement. The client (application on most cases) can connect via 
 a streaming channel.
 
-.. figure:: images/lcd_task_diag.*
+.. figure:: images/lcd_task_diag.odg
 
    LCD task diagram
 
