@@ -1,0 +1,7 @@
+<resources>
+	<resource type="custom" name="LCD_test_setup">
+		<resources>
+			<resource type="xcore" name="A16" id="InRwPvAL"/>
+		</resources>
+	</resource>
+</resources>

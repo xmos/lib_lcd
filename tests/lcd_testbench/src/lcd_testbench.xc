@@ -2,7 +2,7 @@
 #include "lcd.h"
 
 /*
- * Put an lcd into circle slot of U16 board.
+ * Put an lcd into circle slot of A16 board.
  * You should see three colour bars(rgb) fading from left to right surrounded
  * by a white boarder.
  */
