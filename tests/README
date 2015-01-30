@@ -1,0 +1,5 @@
+To run the testbenches, type the following in the command line:
+
+python runtests.py --subtest test_single_lcd --resource-file resources.xml
+
+python runtests.py --subtest test_dual_lcd --resource-file resources.xml
