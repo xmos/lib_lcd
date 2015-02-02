@@ -8,5 +8,5 @@ To run the testbenches:
 ----------------------
 Type the following commands in the command line. Power cycle the hardware after executing one command.
 
-python runtests_manual.py --subtest test_single_lcd --resource-file resources.xml
-python runtests_manual.py --subtest test_dual_lcd --resource-file resources.xml
+python runtests.py --subtest test_single_lcd --resource-file resources.xml
+python runtests.py --subtest test_dual_lcd --resource-file resources.xml

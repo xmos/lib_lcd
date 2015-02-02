@@ -30,4 +30,4 @@ testing of HSYNC and VSYNC pulses, and reproduction of basic colors.
 
     xmostest.runtests()
 
-    xmostest.finish()
+
