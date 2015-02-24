@@ -47,7 +47,7 @@ void lcd_server(streaming chanend c_client,
        );
 
 /** \brief Initialises the LCD with the first line to be rendered. After this completes
- * there is a permenant real time requirement to update the LCD server with more data to render.
+ * there is a permanent real time requirement to update the LCD server with more data to render.
  *
  * \param c_lcd     The channel to the LCD server
  * \param buffer    This is a pointer to the data to be written to the LCD

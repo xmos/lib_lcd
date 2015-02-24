@@ -45,15 +45,17 @@ static void output_data16_port16(
         unsigned &time,
         unsigned width){
     unsigned words_per_row = width>>1;
+
     unsafe {
         p_rgb @ time <: buffer[0];
 
         time += width;
-
         if(!isnull(p_data_enabled))
-           p_data_enabled @ time <: 0;         //blocking instruction
+           p_data_enabled @ time <: 0;         //blocking instruction for that port
+
         for (unsigned i = 1; i < words_per_row; i++)
           p_rgb <: buffer[i];                   //TODO compiler optimisations needed to speed this bit up
+
     }
 }
 
@@ -65,21 +67,22 @@ static void output_data16_port32(
         unsigned &time,
         unsigned width){
     unsigned words_per_row = width>>1;
+
     unsafe {
         unsigned d = buffer[0];
-        p_rgb @ time <: d;
+        p_rgb @ time <: (d & 0xffff);
+        p_rgb <: (d>>16);
+
+        for (unsigned i = 1; i < words_per_row; i++){
+          d = buffer[i];
+          p_rgb <: (d & 0xffff);
+          p_rgb <: (d>>16);
+        }
 
         time += width;
         if(!isnull(p_data_enabled))
             p_data_enabled @ time <: 0;         //blocking instruction
 
-        p_rgb @ time <: (d>>16);
-
-        for (unsigned i = 1; i < words_per_row; i++){
-          d = buffer[i];
-          p_rgb <: d;
-          p_rgb <:(d>>16);
-        }
     }
 }
 
@@ -152,7 +155,7 @@ void lcd_server(streaming chanend c_client,
   time += 1000;
 
   //The count of pixel clocks per horizontal scan line
-  unsigned h_sync_clocks = h_front_porch + h_back_porch + width;
+  unsigned h_sync_clocks = h_pulse_width + h_front_porch + h_back_porch + width;
 
   while (1) {
 
@@ -171,17 +174,17 @@ void lcd_server(streaming chanend c_client,
         p_v_sync @ time <: 1;
 
     if(!isnull(p_h_sync)){
-        for(unsigned i=0;i<v_back_porch - v_pulse_width;i++) {
+        for(unsigned i=0;i<v_back_porch;i++) {
             output_hsync_pulse(time, p_h_sync, h_pulse_width);
             time += h_sync_clocks;
         }
     } else
-        time += h_sync_clocks*(v_back_porch - v_pulse_width);
+        time += h_sync_clocks*v_back_porch;
 
     for (int y = 0; y < height; y++) {
         if(!isnull(p_h_sync))
             output_hsync_pulse(time, p_h_sync, h_pulse_width);
-        time += h_back_porch;
+        time += (h_pulse_width + h_back_porch);
 
         unsigned * unsafe buffer;
         fetch_pointer(c_client, buffer);

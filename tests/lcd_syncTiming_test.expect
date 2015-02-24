@@ -1,0 +1,6 @@
+hsync width: computed = 80 ns; expected = 80 ns
+vsync width: computed = 8480 ns; expected = 8480 ns
+back porches: computed = 71040 ns; expected = 71040 ns
+hsync front porch: computed = 400 ns; expected = 400 ns
+vsync front porch: computed = 67840 ns; expected = 67840 ns
+
