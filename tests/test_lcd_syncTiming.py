@@ -17,15 +17,15 @@ def runtest():
                                "tile[0]:XS1_PORT_1L",
                                "tile[0]:XS1_PORT_1J",
                                "tile[0]:XS1_PORT_1K",
-                               lcd_clk_div = 4,
                                lcd_h_front_porch = 5,
                                lcd_h_back_porch = 40,
                                lcd_h_pulse_width = 1,
                                lcd_v_front_porch = 8,
                                lcd_v_back_porch = 8,
                                lcd_v_pulse_width = 1,
-                               lcd_height = 50,
-                               lcd_width = 60)
+                               lcd_clk_div = 4,
+                               lcd_height = 272,
+                               lcd_width = 480)
 
     tester = xmostest.ComparisonTester(open('lcd_syncTiming_test.expect'),
                                      'lib_lcd', 'lcd_sim_tests',

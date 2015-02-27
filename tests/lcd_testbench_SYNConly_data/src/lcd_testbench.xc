@@ -1,4 +1,5 @@
 #include <platform.h>
+#include <stddef.h>
 #include "lcd.h"
 
 /*
@@ -15,7 +16,7 @@
 #define LCD_HEIGHT 272
 #define LCD_WIDTH 480
 #define LCD_BYTES_PER_PIXEL 2
-#define LCD_OUTPUT_MODE data16_port32
+#define LCD_OUTPUT_MODE data16_port16
 #define LCD_ROW_WORDS (LCD_WIDTH/2)
 
 
@@ -37,9 +38,8 @@ void test(streaming chanend c_lcd) {
 }
 
 
-on tile[0] : out buffered port:32   lcd_rgb                     = XS1_PORT_32A;
+on tile[0] : out buffered port:32   lcd_rgb                     = XS1_PORT_16B;
 on tile[0] : out port               lcd_clk                     = XS1_PORT_1I;
-on tile[0] : out port               lcd_data_enabled            = XS1_PORT_1L;
 on tile[0] : out buffered port:32   lcd_h_sync                  = XS1_PORT_1J;
 on tile[0] : out port               lcd_v_sync                  = XS1_PORT_1K;
 on tile[0] : clock                  lcd_cb                      = XS1_CLKBLK_1;
@@ -47,7 +47,7 @@ on tile[0] : clock                  lcd_cb                      = XS1_CLKBLK_1;
 int main() {
     streaming chan c_lcd;
   par {
-    on tile[0]: lcd_server(c_lcd, lcd_rgb, lcd_clk, lcd_data_enabled, lcd_h_sync, lcd_v_sync,
+    on tile[0]: lcd_server(c_lcd, lcd_rgb, lcd_clk, NULL, lcd_h_sync, lcd_v_sync,
             lcd_cb,
               LCD_WIDTH,
               LCD_HEIGHT,

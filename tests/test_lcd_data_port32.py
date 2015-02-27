@@ -16,8 +16,8 @@ def runtest():
                                "tile[0]:XS1_PORT_1L",
                                "tile[0]:XS1_PORT_1J",
                                "tile[0]:XS1_PORT_1K",
-                               lcd_height = 50,
-                               lcd_width = 60)
+                               lcd_height = 272,
+                               lcd_width = 480)
 
     tester = xmostest.ComparisonTester(open('lcd_data_test.expect'),
                                      'lib_lcd', 'lcd_sim_tests',

@@ -70,18 +70,20 @@ static void output_data16_port32(
 
     unsafe {
         unsigned d = buffer[0];
-        p_rgb @ time <: (d & 0xffff);
-        p_rgb <: (d>>16);
-
-        for (unsigned i = 1; i < words_per_row; i++){
-          d = buffer[i];
-          p_rgb <: (d & 0xffff);
-          p_rgb <: (d>>16);
-        }
+	p_rgb @ time <: d;
 
         time += width;
         if(!isnull(p_data_enabled))
             p_data_enabled @ time <: 0;         //blocking instruction
+
+        p_rgb <: (d>>16);
+
+        for (unsigned i = 1; i < words_per_row; i++){
+          d = buffer[i];
+          p_rgb <: d;
+          p_rgb <: (d>>16);
+        }
+
 
     }
 }

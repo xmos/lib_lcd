@@ -6,19 +6,19 @@ class LCD_syncTiming_checker(xmostest.SimThread):
 
     """
 
-    def __init__(self, lcd_rgb, lcd_clk, lcd_data_enabled, lcd_h_sync, lcd_v_sync, lcd_clk_div, lcd_h_front_porch, lcd_h_back_porch, lcd_h_pulse_width, lcd_v_front_porch, lcd_v_back_porch, lcd_v_pulse_width, lcd_height, lcd_width):
+    def __init__(self, lcd_rgb, lcd_clk, lcd_data_enabled, lcd_h_sync, lcd_v_sync, lcd_h_front_porch, lcd_h_back_porch, lcd_h_pulse_width, lcd_v_front_porch, lcd_v_back_porch, lcd_v_pulse_width, lcd_clk_div, lcd_height, lcd_width):
         self._lcd_rgb = lcd_rgb
         self._lcd_clk = lcd_clk
         self._lcd_data_enabled = lcd_data_enabled
         self._lcd_h_sync = lcd_h_sync
         self._lcd_v_sync = lcd_v_sync
-        self._lcd_clk_div = lcd_clk_div
         self._lcd_h_front_porch = lcd_h_front_porch
         self._lcd_h_back_porch = lcd_h_back_porch
         self._lcd_h_pulse_width = lcd_h_pulse_width
         self._lcd_v_front_porch = lcd_v_front_porch
         self._lcd_v_back_porch = lcd_v_back_porch
         self._lcd_v_pulse_width = lcd_v_pulse_width
+        self._lcd_clk_div = lcd_clk_div
         self._lcd_height = lcd_height
         self._lcd_width = lcd_width
 

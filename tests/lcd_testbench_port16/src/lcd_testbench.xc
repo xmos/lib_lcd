@@ -2,7 +2,7 @@
 #include "lcd.h"
 
 /*
- * Each LCD test frame consists of RGB565 pixel values ranging from 1 to LCD_HEIGHT*LCD_WIDTH 
+ * Each LCD test frame consists of RGB565 pixel values ranging from 1 to LCD_WIDTH sent repeatedly
  */
 
 #define LCD_CLOCK_DIVIDER 4
@@ -12,32 +12,28 @@
 #define LCD_V_FRONT_PORCH 8
 #define LCD_V_BACK_PORCH 8
 #define LCD_V_PULSE_WIDTH 1
-#define LCD_HEIGHT 50
-#define LCD_WIDTH 60
+#define LCD_HEIGHT 272
+#define LCD_WIDTH 480
 #define LCD_BYTES_PER_PIXEL 2
 #define LCD_OUTPUT_MODE data16_port16
 #define LCD_ROW_WORDS (LCD_WIDTH/2)
 
 
 void test(streaming chanend c_lcd) {
-    unsigned data[LCD_HEIGHT][LCD_ROW_WORDS];
+    unsigned data[LCD_ROW_WORDS];
 
-    for (unsigned r=0; r<LCD_HEIGHT; r++)
-        for (unsigned c=0; c<LCD_WIDTH; c++)
-            (data[r],unsigned short[])[c] = r*LCD_WIDTH+c+1;
+    for (unsigned c=0; c<LCD_WIDTH; c++)
+        (data,unsigned short[])[c] = c+1;
 
     unsafe {
-        lcd_init(c_lcd, data[0]);
+        lcd_init(c_lcd, data);
 
         while(1){
-	    for (unsigned r=1; r<LCD_HEIGHT; r++) {
-	        lcd_req(c_lcd);
-        	lcd_update(c_lcd, data[r]);			
+	      lcd_req(c_lcd);
+	      lcd_update(c_lcd, data);			
             }
-            lcd_req(c_lcd);
- 	    lcd_update(c_lcd, data[0]);		
-        }
     }
+
 }
 
 
