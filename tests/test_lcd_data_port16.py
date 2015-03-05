@@ -7,8 +7,6 @@ import os
 def runtest():
     resources = xmostest.request_resource("xsim")
 
-    xmostest.build('lcd_testbench_port16')
-
     binary = 'lcd_testbench_port16/bin/lcd_testbench.xe' 
 
     checker = LCD_data_checker("tile[0]:XS1_PORT_16B",
