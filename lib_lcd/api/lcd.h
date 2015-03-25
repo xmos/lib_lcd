@@ -95,7 +95,7 @@ void lcd_server_sync(streaming chanend c_client,
  * \param n         The number of pixel clocks to add to to veritcal back porch
  */
 void lcd_sync_update(streaming chanend c_sync, int n){
-  c_sync <: update;
+  c_sync <: n;
 }
 
 /** \brief Initialises the LCD with the first line to be rendered. After this completes
