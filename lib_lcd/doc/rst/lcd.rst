@@ -15,7 +15,7 @@ The signals from the xCore required to drive the LCD are:
      * - Data
        - The pixel data supplied to the LCD over a parallel bus.
      * - Data Enabled (DE)
-       - Strobe to indicate that the data on the paralle
+       - Strobe to indicate that the data on the parallel
      * - Horizontal Sync (h_sync)
        - A signal which sends a pulse to indicate the start of the 
          horizontal scan.
@@ -23,12 +23,12 @@ The signals from the xCore required to drive the LCD are:
        - A signal which sends a pulse to indicate the start of the 
          vertical scan.
 
-Connecting to the xCORE SPI master
+Connecting to the xCORE LDC server
 ..................................
 
 The LCD wires need to be connected to the xCORE device as shown in
 :ref:`lcd_xcore_connect`. The control signals can be connected to any of the
-one bit ports on the device provide they do not overlap any other used
+one bit ports on the device provided they do not overlap any other used
 ports and are all on the same tile. The parallel data bus must not overlap 
 with any of the control signals.
 
@@ -53,17 +53,27 @@ by the wiring configuration of:
   - ``green[1:0]`` should be grounded on the LCD
   - ``blue[2:0]`` should be grounded on the LCD
 
-The same LCD could also be driven in monochrome by:
+where ``data`` is a 16 bit port. This has the advantage that the 
+port buffering can be taken advantage of, thus, improving the
+maximum pixel clock frequency. Likewise, rgb888 would be achieved by:
 
-  - ``data[0]`` from the xCore drives ``red[7]`` on the LCD
-  - ``data[0]`` from the xCore drives ``green[7]`` on the LCD
-  - ``data[0]`` from the xCore drives ``blue[7]`` on the LCD
+  - ``data[ 7: 0]`` from the xCore drives ``red[7:0]`` on the LCD
+  - ``data[15: 8]`` from the xCore drives ``green[7:0]`` on the LCD
+  - ``data[23:16]`` from the xCore drives ``blue[7:0]`` on the LCD
+
+where ``data`` is a 32 bit port in this case.
 
 The ``DE``, ``h_sync`` and ``v_sync`` signals are all optional, however, every LCD
 will require some of them. See the datasheet of the LCD to find out
 which signals are required.
 
-The LCDs datasheet will give all the timing characteristics necessary to setup the LCD. Refer to :ref:`lcd_vertical_timing` and :ref:`lcd_horizontal_timing` for clarification of the LCD timing definitions.
+
+Timing configuration
+....................
+
+The LCDs datasheet will give all the timing characteristics necessary 
+to setup the LCD. Refer to :ref:`lcd_vertical_timing` and :ref:`lcd_horizontal_timing` 
+for clarification of the LCD timing definitions.
 
 .. _lcd_vertical_timing:
 
@@ -123,6 +133,17 @@ The correct output mode must be selected for the application and physical
 setup. The data may be up to 32 bits per pixel and the data bus can be 
 from one to 32 bits wide.
 
+LCD operational overview
+------------------------
+
+When in operation the LCD presents a constant real-time requirement on the 
+xCore. An LCD works by sequentially refreshing its pixels, typically working 
+from a corner, refreshing each horizontal line and progressing vertically 
+until the whole screen has been refreshed. This constant refreshing produces 
+the real-time requirement that the xCore must satisfy. To make matters easier 
+there are porch intervals between the refresh of each line. At the end of a 
+line refresh the LCD will pause for a moment before refreshing the next line. 
+This gives the xCore opportunity to prepare the line buffers to be outputted.
 
 LCD API
 --------
@@ -174,18 +195,39 @@ line buffers are transfered my moving pointers from one task to another.
 
 ``lcd_init`` is used to start the LCD running, before this the pixel clock is 
 not running and no other signals are outputting. This gives the application
-time to perpare any necessary line buffers before begining. As soon as the 
-``lcd_init`` has been executed then there is a constant real-time requirement
+time to prepare any necessary line buffers before beginning. As soon as the 
+``lcd_init`` has been executed there is a constant real-time requirement
 on the client to update the LCD server with more line buffers. 
 The LCD server will request new line buffers by inserting a token into the 
 channel to the client. The client must call ``lcd_req`` either by selecting on it
-or by explicitly called normally to acknoledge this request. 
+or by explicitly called normally to acknowledge this request. 
 
-Between the client and the LCD server is a buffer capable of holding of up to 
+Between the client and the LCD server is a command buffer capable of holding of up to 
 two line buffers from the client to the server. This means that the client can 
 call lcd_update more than once per lcd_req in order to increase the time between 
 subsequenct updates if need be. However, for every ``lcd_req`` there must be one 
 ``lcd_update`` on average.
+
+
+
+Optimising the decoupling between client and server
+...................................................
+
+In order to maximize performance the client must make best use of the command 
+buffer between the ``lcd_server`` and the client application. To do this the 
+client must consider that at any given time there can be up to 4 line buffers 
+in the LCD pipeline; these buffers are:
+
+  - one being worked on by the client application
+  - two pointer in the command buffer between the client and ``lcd_server``
+  - one being outputted to the LCD by the ``lcd_server``
+
+
+This means that if the client application has to service another request it can 
+have up to the time of outputting 3 lines to the LCD before sending the next 
+``lcd_update`` to the ``lcd_server``. This is provided that the command buffers 
+are full and the ``lcd_server`` has just started outputting a line.
+
 
 API
 ...
