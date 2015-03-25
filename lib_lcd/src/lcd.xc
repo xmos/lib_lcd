@@ -10,7 +10,9 @@ static void init(streaming chanend c_lcd){
     c_lcd :> int;
     c_lcd <: 0;
 }
-
+void lcd_sync_update(streaming chanend c_sync, int n){
+   c_sync <:n;
+}
 void lcd_init(streaming chanend c_lcd, unsigned * unsafe buffer){
     c_lcd <: 0;
     c_lcd :> int;
