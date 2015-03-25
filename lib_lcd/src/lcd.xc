@@ -1,6 +1,7 @@
 // Copyright (c) 2015, XMOS Ltd, All rights reserved
 #include <platform.h>
 #include <xs1.h>
+#include <xclib.h>
 #include "lcd.h"
 #include <print.h>
 #include <stdlib.h>
@@ -103,8 +104,11 @@ static void output_hsync_pulse(unsigned time,
 
 static void error(){}
 
+
+
 #pragma unsafe arrays
-void lcd_server(streaming chanend c_client,
+void lcd_impl(streaming chanend c_client,
+        streaming chanend      ?c_sync,
         out buffered port:32   p_rgb ,
         out port               p_clk,
         out port               ?p_data_enabled,
@@ -120,7 +124,7 @@ void lcd_server(streaming chanend c_client,
         const static unsigned v_back_porch,
         const static unsigned v_pulse_width,
         const static e_output_mode output_mode,
-        const static unsigned clock_divider) {
+        const static unsigned clock_divider){
 
   unsigned time;
 
@@ -161,7 +165,16 @@ void lcd_server(streaming chanend c_client,
   unsigned h_sync_clocks = h_pulse_width + h_front_porch + h_back_porch + width;
 
   while (1) {
-
+      if (!isnull(c_sync)){
+      select {
+          case c_sync:> int n:{
+              time +=n;
+              break;
+          }
+      default:
+          break;
+      }
+    }
     if(!isnull(p_v_sync))
         p_v_sync @ time <: 0;
 
@@ -207,7 +220,61 @@ void lcd_server(streaming chanend c_client,
     for(unsigned i=0;i<v_front_porch;i++) {
         if(!isnull(p_h_sync))
             output_hsync_pulse(time, p_h_sync, h_pulse_width);
+
         time += h_sync_clocks;
     }
   }
+}
+
+void lcd_server_sync(streaming chanend c_client,
+        streaming chanend      c_sync,
+        out buffered port:32   p_rgb ,
+        out port               p_clk,
+        out port               ?p_data_enabled,
+        out buffered port:32   ?p_h_sync,
+        out port               ?p_v_sync,
+        clock                  p_cb,
+        const static unsigned width,
+        const static unsigned height,
+        const static unsigned h_front_porch,
+        const static unsigned h_back_porch,
+        const static unsigned h_pulse_width,
+        const static unsigned v_front_porch,
+        const static unsigned v_back_porch,
+        const static unsigned v_pulse_width,
+        const static e_output_mode output_mode,
+        const static unsigned clock_divider) {
+
+   lcd_impl(c_client, c_sync, p_rgb, p_clk, p_data_enabled, 
+            p_h_sync, p_v_sync, p_cb, width, height, 
+            h_front_porch, h_back_porch, h_pulse_width, 
+            v_front_porch, v_back_porch, v_pulse_width, 
+            output_mode, clock_divider);
+
+}
+
+void lcd_server(streaming chanend c_client,
+        out buffered port:32   p_rgb ,
+        out port               p_clk,
+        out port               ?p_data_enabled,
+        out buffered port:32   ?p_h_sync,
+        out port               ?p_v_sync,
+        clock                  p_cb,
+        const static unsigned width,
+        const static unsigned height,
+        const static unsigned h_front_porch,
+        const static unsigned h_back_porch,
+        const static unsigned h_pulse_width,
+        const static unsigned v_front_porch,
+        const static unsigned v_back_porch,
+        const static unsigned v_pulse_width,
+        const static e_output_mode output_mode,
+        const static unsigned clock_divider) {
+
+   lcd_impl(c_client, null, p_rgb, p_clk, p_data_enabled, 
+            p_h_sync, p_v_sync, p_cb, width, height, 
+            h_front_porch, h_back_porch, h_pulse_width, 
+            v_front_porch, v_back_porch, v_pulse_width, 
+            output_mode, clock_divider);
+
 }

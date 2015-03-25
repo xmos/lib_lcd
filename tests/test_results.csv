@@ -1,6 +1,0 @@
-Product,Test Group,Test,Config,Environment,Result
-lib_lcd,lcd_sim_tests,DEonly_data_test,,,PASS
-lib_lcd,lcd_sim_tests,SYNConly_data_test,,,PASS
-lib_lcd,lcd_sim_tests,data16_test,,,PASS
-lib_lcd,lcd_sim_tests,data32_test,,,PASS
-lib_lcd,lcd_sim_tests,sync_test,,,PASS

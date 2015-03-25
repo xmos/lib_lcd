@@ -229,6 +229,35 @@ have up to the time of outputting 3 lines to the LCD before sending the next
 are full and the ``lcd_server`` has just started outputting a line.
 
 
+Synchronisation of LCD with an external source
+..............................................
+
+''lcd_server_sync'' has the ability to synchronise with an external source by 
+streaching or shrinking its vertical back porch. The absolute value of the 
+adjustment must be within half a horizontal time. In order to synchronise to 
+an external clock the use of a PID control loop is recommended.
+
+In order to make an adjustment to client application need to call 
+``lcd_update_sync`` with the required update amount. Then on the next frame the 
+update will take effect for only that frame. Subsequent frames will revert to 
+the default timings.
+
+A typicall use case for this functionality is synchronising and LCD to an 
+external video stream. For example: streaming video from a image sensor might 
+be produced at the rate of 15.000 frames per second. The LCD server should 
+then be setup to run the LCD at 15.000 frames per second also by adjusting
+first the clock divider, then the porch timings.
+
+The frame rate can be calculated by solving the following formula:
+
+Frames per second = Pixel clock rate / ((Thpw + Thfp + Thbp + Thd) * (Tvpw + Tvfp + Tvbp + Tvd))
+
+The easiest was to do this is to substitute the knowns: Tvd(screen height), 
+Thd(screen width) and frames per second (extenal source). Next choose a clock 
+divider that will allow the portch timings to be within specification as 
+given by the LCDs datasheet. Finally pick the porch timings to match the frame 
+rate as exactly as possible to the external source.
+
 API
 ...
 
