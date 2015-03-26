@@ -15,7 +15,7 @@ The signals from the xCore required to drive the LCD are:
      * - Data
        - The pixel data supplied to the LCD over a parallel bus.
      * - Data Enabled (DE)
-       - Strobe to indicate that the data on the parallel
+       - Strobe to indicate that the data on the parallel bus is valid
      * - Horizontal Sync (h_sync)
        - A signal which sends a pulse to indicate the start of the 
          horizontal scan.
@@ -23,12 +23,12 @@ The signals from the xCore required to drive the LCD are:
        - A signal which sends a pulse to indicate the start of the 
          vertical scan.
 
-Connecting to the xCORE LDC server
+Connecting to the xCORE LCD server
 ..................................
 
 The LCD wires need to be connected to the xCORE device as shown in
 :ref:`lcd_xcore_connect`. The control signals can be connected to any of the
-one bit ports on the device provided they do not overlap any other used
+one bit ports on the device provided they do not overlap with any other used
 ports and are all on the same tile. The parallel data bus must not overlap 
 with any of the control signals.
 
@@ -43,12 +43,12 @@ with any of the control signals.
 The data bus may be wired to the LCD in any electrically sound 
 configuration. For example, a 24 bit colour LCD with 8 bits for 
 each of red, green and blue, could be driven by a 16 bit bus. 
-For the standard configuration of RGB565, this could be achieved 
+For the standard RGB565,format this could be achieved 
 by the wiring configuration of:
 
-  - ``data[ 4: 0]`` from the xCore drives ``red[7:3]`` on the LCD
-  - ``data[10: 5]`` from the xCore drives ``green[7:2]`` on the LCD
-  - ``data[15:11]`` from the xCore drives ``blue[7:3]`` on the LCD
+  - ``data[ 4: 0]`` from the xCORE drives ``red[7:3]`` on the LCD
+  - ``data[10: 5]`` from the xCORE drives ``green[7:2]`` on the LCD
+  - ``data[15:11]`` from the xCORE drives ``blue[7:3]`` on the LCD
   - ``red[2:0]`` should be grounded on the LCD
   - ``green[1:0]`` should be grounded on the LCD
   - ``blue[2:0]`` should be grounded on the LCD
@@ -57,9 +57,9 @@ where ``data`` is a 16 bit port. This has the advantage that the
 port buffering can be taken advantage of, thus, improving the
 maximum pixel clock frequency. Likewise, rgb888 would be achieved by:
 
-  - ``data[ 7: 0]`` from the xCore drives ``red[7:0]`` on the LCD
-  - ``data[15: 8]`` from the xCore drives ``green[7:0]`` on the LCD
-  - ``data[23:16]`` from the xCore drives ``blue[7:0]`` on the LCD
+  - ``data[ 7: 0]`` from the xCORE drives ``red[7:0]`` on the LCD
+  - ``data[15: 8]`` from the xCORE drives ``green[7:0]`` on the LCD
+  - ``data[23:16]`` from the xCORE drives ``blue[7:0]`` on the LCD
 
 where ``data`` is a 32 bit port in this case.
 
@@ -71,7 +71,7 @@ which signals are required.
 Timing configuration
 ....................
 
-The LCDs datasheet will give all the timing characteristics necessary 
+The LCD's datasheet will give all the timing characteristics necessary 
 to setup the LCD. Refer to :ref:`lcd_vertical_timing` and :ref:`lcd_horizontal_timing` 
 for clarification of the LCD timing definitions.
 
@@ -110,7 +110,7 @@ for clarification of the LCD timing definitions.
        - Vertical back porch
      * - *Tvd*
        - Vertical data period
-     * - *Tvfb*
+     * - *Tvfp*
        - Vertical front porch
      * - *Tv*
        - Vertical total time
@@ -120,7 +120,7 @@ for clarification of the LCD timing definitions.
        - Horizontal back porch
      * - *Thd*
        - Horizontal data valid
-     * - *Thfb*
+     * - *Thfp*
        - Horizontal front porch
      * - *Th*
        - Horizontal total time
@@ -137,13 +137,13 @@ LCD operational overview
 ------------------------
 
 When in operation the LCD presents a constant real-time requirement on the 
-xCore. An LCD works by sequentially refreshing its pixels, typically working 
+xCORE. An LCD works by sequentially refreshing its pixels, typically working 
 from a corner, refreshing each horizontal line and progressing vertically 
 until the whole screen has been refreshed. This constant refreshing produces 
-the real-time requirement that the xCore must satisfy. To make matters easier 
+the real-time requirement that the xCORE must satisfy. To make matters easier 
 there are porch intervals between the refresh of each line. At the end of a 
 line refresh the LCD will pause for a moment before refreshing the next line. 
-This gives the xCore opportunity to prepare the line buffers to be outputted.
+This gives the xCORE opportunity to prepare the line buffers to be outputted.
 
 LCD API
 --------
@@ -193,8 +193,8 @@ and connects and application to it::
 Note that the client and LCD server must be on the same tile as the 
 line buffers are transfered my moving pointers from one task to another.
 
-``lcd_init`` is used to start the LCD running, before this the pixel clock is 
-not running and no other signals are outputting. This gives the application
+``lcd_init`` is used to start the LCD running, before which the pixel clock is 
+not running and no other signals are not outputting. This gives the application
 time to prepare any necessary line buffers before beginning. As soon as the 
 ``lcd_init`` has been executed there is a constant real-time requirement
 on the client to update the LCD server with more line buffers. 
@@ -219,7 +219,7 @@ client must consider that at any given time there can be up to 4 line buffers
 in the LCD pipeline; these buffers are:
 
   - one being worked on by the client application
-  - two pointer in the command buffer between the client and ``lcd_server``
+  - two in the command buffer between the client and ``lcd_server``
   - one being outputted to the LCD by the ``lcd_server``
 
 
@@ -229,7 +229,7 @@ have up to the time of outputting 3 lines to the LCD before sending the next
 are full and the ``lcd_server`` has just started outputting a line.
 
 
-Synchronisation of LCD with an external source
+Synchronization of LCD with an external source
 ..............................................
 
 ''lcd_server_sync'' has the ability to synchronise with an external source by 
@@ -237,12 +237,12 @@ streaching or shrinking its vertical back porch. The absolute value of the
 adjustment must be within half a horizontal time. In order to synchronise to 
 an external clock the use of a PID control loop is recommended.
 
-In order to make an adjustment to client application need to call 
+In order to make an adjustment, the client application needs to call 
 ``lcd_update_sync`` with the required update amount. Then on the next frame the 
 update will take effect for only that frame. Subsequent frames will revert to 
 the default timings.
 
-A typicall use case for this functionality is synchronising and LCD to an 
+A typicall use case for this functionality is synchronizing the LCD to an 
 external video stream. For example: streaming video from a image sensor might 
 be produced at the rate of 15.000 frames per second. The LCD server should 
 then be setup to run the LCD at 15.000 frames per second also by adjusting
@@ -252,8 +252,8 @@ The frame rate can be calculated by solving the following formula:
 
 Frames per second = Pixel clock rate / ((Thpw + Thfp + Thbp + Thd) * (Tvpw + Tvfp + Tvbp + Tvd))
 
-The easiest was to do this is to substitute the knowns: Tvd(screen height), 
-Thd(screen width) and frames per second (extenal source). Next choose a clock 
+The easiest way to do this is to substitute the knowns: Tvd(screen height), 
+Thd(screen width) and frames per second (external source). Next choose a clock 
 divider that will allow the portch timings to be within specification as 
 given by the LCDs datasheet. Finally pick the porch timings to match the frame 
 rate as exactly as possible to the external source.
