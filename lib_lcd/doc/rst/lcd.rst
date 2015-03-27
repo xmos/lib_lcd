@@ -266,7 +266,7 @@ API
 .. doxygenfunction:: lcd_init
 .. doxygenfunction:: lcd_update
 .. doxygenfunction:: lcd_req
-.. doxygenfunction:: lcd_update_sync
+.. doxygenfunction:: lcd_sync_update
 
 |newpage|
 
