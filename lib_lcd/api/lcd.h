@@ -47,7 +47,7 @@ void lcd_server(streaming chanend c_client,
         const static unsigned clock_divider
        );
 
-/** \brief The LCD server.
+/** \brief The LCD server with synchronization.
  *
  * \param c_client          The data channel connecting to the client.
  * \param c_sync            The synchronisation channel connecting to the client.
