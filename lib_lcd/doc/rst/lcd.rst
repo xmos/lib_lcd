@@ -81,7 +81,7 @@ for clarification of the LCD timing definitions.
 
   {signal: [
     {name: 'V_SYNC',      wave: '101|...|....|.01', node: '.AB..D....C...E'},
-    {name: 'Horizontal',  wave: '222|222|2222|22'},
+    {name: 'Horizontal time period',  wave: '222|222|2222|22'},
     {                     node: '.MH..I....K...J'},
     {                     node: '.N............O'}],
     edge: ['A-M', 'B-H', 'D-I', 'C-K','E-J' , 'M<->H Tvpw', 'H<->I Tvbp', 'I<->K Tvd', 'K<->J Tvfp', 'O<->N Tv']
@@ -232,9 +232,9 @@ are full and the ``lcd_server`` has just started outputting a line.
 Synchronization of LCD with an external source
 ..............................................
 
-''lcd_server_sync'' has the ability to synchronise with an external source by 
+''lcd_server_sync'' has the ability to synchronize with an external source by 
 streaching or shrinking its vertical back porch. The absolute value of the 
-adjustment must be within half a horizontal time. In order to synchronise to 
+adjustment must be within half a horizontal time. In order to synchronize to 
 an external clock the use of a PID control loop is recommended.
 
 In order to make an adjustment, the client application needs to call 
