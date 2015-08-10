@@ -6,7 +6,7 @@ How to use the LCD library with LCD Demo
 Summary
 -------
 
-This application note demonstrates how  use the lib_lcd library to write to an LCD screen via a parallel bus. The LCD library is used to drive a single graphics LCD module of upto 800 * 600 pixels with a maximum pixel clocks of 62.5MHz. This application note drives a 480 * 272 pixel LCD module with a pixel clock of 16.67MHz which is available with XA-SK-SCR480 sliceCARD.
+This application note demonstrates how to use the lib_lcd library to write to an LCD screen via a parallel bus. The LCD library is used to drive a single graphics LCD module of upto 800 * 600 pixels with a maximum pixel clocks of 62.5MHz. This application note drives a 480 * 272 pixel LCD module with a pixel clock of 16.67MHz which is available with XA-SK-SCR480 sliceCARD.
 
 Features
 ........
@@ -46,11 +46,13 @@ Prerequisites
   - For the full API listing of the XMOS LCD Library please see
     the library user guide [#]_.
 
-  - For the datasheet of the LCD module attached with the LCD sliceCARD, KENTEC K430WQA-V4-F [#]_.
+  - For the datasheet of the LCD module attached with the LCD sliceCARD [#]_., KENTEC K430WQA-V4-F [#]_.
 
   .. [#] http://www.xmos.com/published/glossary
 
   .. [#] http://www.xmos.com/support/libraries/lib_lcd
+
+  .. [#] https://www.xmos.com/support/boards?product=15832
 
   .. [#] http://www.kentec.com.hk/images/UploadFile/20111115190908-6.pdf
 

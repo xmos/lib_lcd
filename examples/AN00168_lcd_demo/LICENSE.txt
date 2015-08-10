@@ -275,5 +275,5 @@ Parties
       non-exclusive jurisdiction of the English courts.
 
 Schedule
-XMOS I2S/TDM Library sofware
+XMOS application note AN00168 software
 No license fee.
