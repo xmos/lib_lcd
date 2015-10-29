@@ -1,12 +1,12 @@
-How to use the LCD library with LCD Demo
-========================================
+How to use the LCD library
+==========================
 
 .. version:: 1.0.0
 
 Summary
 -------
 
-This application note demonstrates how to use the lib_lcd library to write to an LCD screen via a parallel bus. The LCD library is used to drive a single graphics LCD module of upto 800 * 600 pixels with a maximum pixel clocks of 62.5MHz. This application note drives a 480 * 272 pixel LCD module with a pixel clock of 16.67MHz which is available with XA-SK-SCR480 sliceCARD.
+This application note demonstrates how to use the lib_lcd library to write to an LCD screen via a parallel bus. The LCD library is used to display on a single graphics LCD module of upto 800 * 600 pixels with a maximum pixel clocks of 62.5MHz. This application note uses a 480 * 272 pixel LCD module with a pixel clock of 16.67MHz which is available on XA-SK-SCR480 sliceCARD.
 
 Features
 ........
@@ -17,9 +17,9 @@ Features
 
   - Resolution of up to 800 * 600 pixels.
 
-  - Configurability of LCD pixel dimensions, clock rate, horizontal and vertical timing requirements, port mapping of the LCD.
+  - Configurability of LCD pixel dimensions, clock rate, horizontal and vertical timing requirements.
 
-  - The function lcd_server requires just one core, the client functions, located in lcd.h are very low overhead and are called from the application.
+  - The function lcd_server requires just one core. The client functions, located in lcd.h are very low overhead and are called from the application.
 
 Required tools and libraries
 ............................

@@ -87,7 +87,7 @@ void demo(streaming chanend c_lcd) {
             }
             line = 0;
 
-            //move_sprite(x, y, vx, vy);
+            move_sprite(x, y, vx, vy);
         }
   }
 }
@@ -124,7 +124,6 @@ int main() {
               LCD_OUTPUT_MODE,
               LCD_CLOCK_DIVIDER);
     on tile[1]: demo(c_lcd);
-    on tile[1]: par(int i=0;i<6;i++) while (1);
   }
   return 0;
 }
