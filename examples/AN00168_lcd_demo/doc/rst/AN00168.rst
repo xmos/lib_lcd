@@ -14,7 +14,7 @@ Block diagram
 .............
 
 .. figure:: images/block_diagram.*
-   :scale: 60%
+   :scale: 100%
    :align: center
 
    Block diagram of LCD application example
@@ -110,10 +110,12 @@ The ``demo()`` function is given below:
    :start-on: void demo
    :end-before: //port start
 
-``lcd_init`` must be called before ``lcd_update`` is called. This puts the LCD server into a ready state to accept the data. A double line buffer is maintained to store two successive lines. While one line buffer is being sent by the lcd_server, the demo creates the other line buffer. ``lcd_update`` is used to send a buffer of pixel data to the LCD server. There is a real-time requirement that this function is called often enough to maintain the display. ``lcd_req`` is a function (also a select handler) that acknowledges the LCDs request for the next line of pixel data. The LCD server does no buffering of pixel line arrays, therefore, for every ``lcd_req`` there must be only one ``lcd_update``. Likewise for every ``lcd_update`` there must be only one ``lcd_req``. The pixel array must be on the same tile as the ``lcd_server``. ``x`` and ``y`` variables present in the demo indicate the co-ardinates of the image being displayed on the screen. The image keeps moving randomly on the screen when the lcd_demo is run. ``move_sprite(x, y, vx, vy)`` function is responsible for the random movement of the logo and whenever the logo touches the borders the logo bounces back. ``add()`` function available in the demo pushes the pixel data value into one of the two buffers available in the demo and ``sub()`` function is used to remove any residue of the ``logo[]`` present in the previous buffer and fill it with the white pixel data. An overview of the the communication between ``demo`` and ``lcd_server`` is shown below:
+``lcd_init`` must be called before ``lcd_update`` is called. This puts the LCD's server into a ready state to accept the data. A double line buffer is maintained to store two successive lines. While one line buffer is being sent by the lcd_server, the demo creates the other line buffer. ``lcd_update`` is used to send a buffer of pixel data to the LCD server. There is a real-time requirement that this function is called often enough to maintain the display. ``lcd_req`` is a function (also a select handler) that acknowledges the LCDs request for the next line of pixel data. The LCD server does no buffering of pixel line arrays, therefore, for every ``lcd_req`` there must be only one ``lcd_update``. Likewise for every ``lcd_update`` there must be only one ``lcd_req``.
+
+The pixel array must be on the same tile as the ``lcd_server``. ``x`` and ``y`` variables present in the demo indicate the co-ardinates of the image being displayed on the screen. The image keeps moving randomly on the screen when the lcd_demo is run. ``move_sprite(x, y, vx, vy)`` function is responsible for the random movement of the logo and whenever the logo touches the borders the logo bounces back. ``add()`` function available in the demo pushes the pixel data value into one of the two buffers available in the demo and ``sub()`` function is used to remove any residue of the ``logo[]`` present in the previous buffer and fill it with the white pixel data. An overview of the the communication between ``demo`` and ``lcd_server`` is shown below:
 
 .. figure:: images/overview.*
-   :scale: 60%
+   :scale: 100%
    :align: center
 
    Overview of the LCD demo
