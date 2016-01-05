@@ -1,4 +1,4 @@
-// Copyright (c) 2015, XMOS Ltd, All rights reserved
+// Copyright (c) 2016, XMOS Ltd, All rights reserved
 #ifndef _lcd_h_
 #define _lcd_h_
 #include <xs1.h>
