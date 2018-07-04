@@ -77,30 +77,16 @@ for clarification of the LCD timing definitions.
 
 .. _lcd_vertical_timing:
 
-.. wavedrom:: LCD vertical timing
+.. figure:: images/vertical_timing.*
 
-  {signal: [
-    {name: 'V_SYNC',      wave: '101|...|....|.01', node: '.AB..D....C...E'},
-    {name: 'Horizontal time period',  wave: '222|222|2222|22'},
-    {                     node: '.MH..I....K...J'},
-    {                     node: '.N............O'}],
-    edge: ['A-M', 'B-H', 'D-I', 'C-K','E-J' , 'M<->H Tvpw', 'H<->I Tvbp', 'I<->K Tvd', 'K<->J Tvfp', 'O<->N Tv']
-  }
+   LCD vertical timing
 
 .. _lcd_horizontal_timing:
 
-.. wavedrom:: LCD horizontal timing
+.. figure:: images/horizontal_timing.*
 
-  {signal: [
-    {name: 'PIXEL_CLK',  wave: '10101|01010101|01010|101', node: '.A.B...D..........C....E'},
-    {name: 'DE',         wave: '0....|.1......|...0.|...'},
-    {name: 'H_SYNC',     wave: '10.1.|........|.....|..0'},
-    {name: 'RGB',        wave: 'x....|.2.2.2.2|.2.x.|x..', node:'', data: ['DQ[0]','DQ[1]','DQ[2]',,'DQ[w-1]' ]},
-     {              node: '.M.H...I..........K....J'},
-     {              node: '.O.....................P'}],
-    edge: ['M-A ', 'B-H', 'C-K' , 'D-I', 'E-J', 'M<->H Thpw', 'H<->I Thbp', 'I<->K Thd', 'K<->J Thfp', 'O<->P Th']
-  }
-  
+   LCD horizontal timing
+
 .. list-table:: LCD Timing 
      :class: vertical-borders horizontal-borders
 

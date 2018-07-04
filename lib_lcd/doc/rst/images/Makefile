@@ -13,6 +13,10 @@ _uncropped/%.pdf: %.odg | _uncropped
 %.pdf: _uncropped/%.pdf
 	pdfcrop $< $@
 
+wavedrom:
+	WaveDromEditor source horizontal_timing.js png horizontal_timing.png
+	WaveDromEditor source vertical_timing.js png vertical_timing.png
+
 clean:
 	-rm $(PDFS)
 	-rm _uncropped/*.pdf
